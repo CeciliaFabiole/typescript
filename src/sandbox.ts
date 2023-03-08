@@ -112,8 +112,81 @@
 
 //------------------------------------------------------------------------------
 //DOM and TYPE CASTING
-const anchor = document.querySelector('a')!;
-// != I know this exist
-console.log(anchor)
-console.log(anchor.href)
-const form = document.querySelector('a')!;
+// const anchor = document.querySelector('a')!;
+// // != I know this exist
+// console.log(anchor)
+// console.log(anchor.href)
+// // const form = document.querySelector('form')!;
+// // console.log(form)
+// //if I grab the element typescript knows the element type
+// //but if I use a class for ts it's just an element 
+// //so i need to specify it
+// const form = document.querySelector('.new-item-form') as HTMLFormElement
+// console.log(form.children)
+
+// //inputs
+// const type = document.querySelector('#type') as HTMLSelectElement
+// const toform = document.querySelector('#toform') as HTMLInputElement
+// const details = document.querySelector('#details') as HTMLInputElement
+// const amount = document.querySelector('#amount') as HTMLInputElement
+
+// form.addEventListener('submit', (e:Event) => {
+//     e.preventDefault();
+//     console.log(type.value,toform.value,details.value,amount.value)
+// })
+
+//------------------------------------------------------------------------------
+//GENERICS
+//reusable blocks of code that can be used with different type of code
+//return a new object based on the old one with id more
+const addUID = <T extends object|{name:string}>(obj:T) => {
+    let uid = Math.floor(Math.random()*100)
+    return {...obj,uid}
+    
+}
+let docOne = addUID({
+    name:'yoshi',
+    age: 40
+})
+console.log(docOne)
+console.log(docOne.name)
+console.log(docOne.age)
+//------------------------------------------------------------------------------
+//INTERFACES
+//enforce a certain type of structure of class or object
+interface IsPerson {
+    name: string;
+    age:number;
+    speak(a:string):void;
+    spend(a:number):number;
+}
+// all the variables that declare to be isPerson must have this characteristic
+const me:IsPerson = {
+    name:'shaun',
+    age:30,
+    speak(text:string){
+        console.log(text)
+    },
+    spend(amount:number){
+        console.log('I spent', amount)
+        return amount
+    }
+}
+console.log(me)
+const someone:IsPerson = {
+    name:'Cecilia',
+    age:27,
+    speak(text:string){
+        console.log(text)
+    },
+    spend(amount:number){
+        console.log('I spent', amount)
+        return amount
+    }
+}
+console.log(someone)
+const greetPerson = (person:IsPerson, num:number)=>{
+    console.log('hello', person.name, person.spend(num))
+}
+greetPerson(me, 10)
+greetPerson(someone, 5)
