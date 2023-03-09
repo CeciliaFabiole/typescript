@@ -280,14 +280,54 @@ const list = new ListTemplate(ul!)
 form.addEventListener('submit', (e : Event) => {
     e.preventDefault();
 
+    let values:[string, string, number] = [tofrom.value, details.value, amount.valueAsNumber]
+
     let doc: HasFormatter
     if(type.value === 'invoice'){
-        doc = new Invoice3(tofrom.value, details.value, amount.valueAsNumber) //!!!!remember valueAsNumber
+        doc = new Invoice3(...values) //!!!!remember valueAsNumber
     } else {
-        doc = new Invoice2(tofrom.value, details.value, amount.valueAsNumber) //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
+        doc = new Invoice2(...values) //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
     }
     list.render(doc, type.value, 'end')
 })
 
 //------------------------------------------------------------------------------
 //ENUMS
+//store set of constants or keywords and associate them with numeric values
+enum ResourceType {
+    BOOK, AUTHOR, TITLE, FILM, DIRECTOR, PERSON
+}
+interface Resource<T>{
+    uid:number;
+    resourceType:ResourceType;
+    data:T;
+}
+const resource1 : Resource<object> = {
+    uid:1,
+    resourceType:ResourceType.TITLE,
+    data:{title:'name of the wind'},
+}
+const resource2 : Resource<object> = {
+    uid:10,
+    resourceType:ResourceType.PERSON,
+    data:{name:'yoshi'},
+}
+const resource3 : Resource<object> = {
+    uid:10,
+    resourceType: ResourceType.BOOK,
+    data:{book:'divergent'},
+}
+//------------------------------------------------------------------------------
+//TUPLES
+//like array, square brackets and method array
+//BUUUUT the types of data in each position in a tuple is fixed once
+//it's been initialized
+let container = ['mario', 25, true]
+container[0] = false
+container[1] = 'yoshi'
+container = [30,false,'yoshi']
+
+let tuple:[string, number, boolean] = ['yoshi', 4, true]
+tuple[0]='mario'
+tuple[0]='luigi'
+tuple[1]=30

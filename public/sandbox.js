@@ -255,14 +255,53 @@ const ul = document.querySelector('ul');
 const list = new ListTemplate(ul);
 form.addEventListener('submit', (e) => {
     e.preventDefault();
+    let values = [tofrom.value, details.value, amount.valueAsNumber];
     let doc;
     if (type.value === 'invoice') {
-        doc = new Invoice3(tofrom.value, details.value, amount.valueAsNumber); //!!!!remember valueAsNumber
+        doc = new Invoice3(...values); //!!!!remember valueAsNumber
     }
     else {
-        doc = new Invoice2(tofrom.value, details.value, amount.valueAsNumber); //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
+        doc = new Invoice2(...values); //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
     }
     list.render(doc, type.value, 'end');
 });
 //------------------------------------------------------------------------------
 //ENUMS
+//store set of constants or keywords and associate them with numeric values
+var ResourceType;
+(function (ResourceType) {
+    ResourceType[ResourceType["BOOK"] = 0] = "BOOK";
+    ResourceType[ResourceType["AUTHOR"] = 1] = "AUTHOR";
+    ResourceType[ResourceType["TITLE"] = 2] = "TITLE";
+    ResourceType[ResourceType["FILM"] = 3] = "FILM";
+    ResourceType[ResourceType["DIRECTOR"] = 4] = "DIRECTOR";
+    ResourceType[ResourceType["PERSON"] = 5] = "PERSON";
+})(ResourceType || (ResourceType = {}));
+const resource1 = {
+    uid: 1,
+    resourceType: ResourceType.TITLE,
+    data: { title: 'name of the wind' },
+};
+const resource2 = {
+    uid: 10,
+    resourceType: ResourceType.PERSON,
+    data: { name: 'yoshi' },
+};
+const resource3 = {
+    uid: 10,
+    resourceType: ResourceType.BOOK,
+    data: { book: 'divergent' },
+};
+//------------------------------------------------------------------------------
+//TUPLES
+//like array, square brackets and method array
+//BUUUUT the types of data in each position in a tuple is fixed once
+//it's been initialized
+let container = ['mario', 25, true];
+container[0] = false;
+container[1] = 'yoshi';
+container = [30, false, 'yoshi'];
+let tuple = ['yoshi', 4, true];
+tuple[0] = 'mario';
+tuple[0] = 'luigi';
+tuple[1] = 30;
