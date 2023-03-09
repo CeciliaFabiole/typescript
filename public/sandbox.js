@@ -38,10 +38,11 @@
 // greet = ()=>{
 //     console.log('hello, again')
 // }
-// const add = (a:number = 5, b:number =10, c:number|string=15):void=>{
-//     console.log(a+b+c) //=> perché no? faccio una soma e aggancio una stringa
+// const add = <Type>(a:number = 5, b:number =10, c:Type):void=>{
+//     console.log(a + b + c)                                                       //=> questo errore non lo capisco
 // }
-// add(7,10, 'd')
+// add<string>(7,10,'d')
+// add<number>(7,10,12)
 // const minus = (a:number, b:number):number=>{
 //     return a-b
 // }
@@ -95,69 +96,173 @@
 // }
 // logDetails(ninja)
 //------------------------------------------------------------------------------
-//DOM and TYPE CASTING
-// const anchor = document.querySelector('a')!;
-// // != I know this exist
-// console.log(anchor)
-// console.log(anchor.href)
-// // const form = document.querySelector('form')!;
-// // console.log(form)
-// //if I grab the element typescript knows the element type
-// //but if I use a class for ts it's just an element 
-// //so i need to specify it
-// const form = document.querySelector('.new-item-form') as HTMLFormElement
-// console.log(form.children)
-// //inputs
-// const type = document.querySelector('#type') as HTMLSelectElement
-// const toform = document.querySelector('#toform') as HTMLInputElement
-// const details = document.querySelector('#details') as HTMLInputElement
-// const amount = document.querySelector('#amount') as HTMLInputElement
-// form.addEventListener('submit', (e:Event) => {
-//     e.preventDefault();
-//     console.log(type.value,toform.value,details.value,amount.value)
-// })
-//------------------------------------------------------------------------------
 //GENERICS
 //reusable blocks of code that can be used with different type of code
 //return a new object based on the old one with id more
-const addUID = (obj) => {
-    let uid = Math.floor(Math.random() * 100);
-    return Object.assign(Object.assign({}, obj), { uid });
-};
-let docOne = addUID({
-    name: 'yoshi',
-    age: 40
-});
-console.log(docOne);
-console.log(docOne.name);
-console.log(docOne.age);
+// const addUID = <T extends object|{name:string}>(obj:T) => {
+//     let uid = Math.floor(Math.random()*100)
+//     return {...obj,uid}
+// }
+// let docOne = addUID({
+//     name:'yoshi',
+//     age: 40
+// })
+// console.log(docOne)
+// console.log(docOne.name)
+// console.log(docOne.age)
+// //------------------------------------------------------------------------------
+// //INTERFACES
+// //enforce a certain type of structure of class or object
+// interface IsPerson {
+//     name: string;
+//     age:number;
+//     speak(a:string):void;
+//     spend(a:number):number;
+// }
 // all the variables that declare to be isPerson must have this characteristic
-const me = {
-    name: 'shaun',
-    age: 30,
-    speak(text) {
-        console.log(text);
-    },
-    spend(amount) {
-        console.log('I spent', amount);
-        return amount;
+// const me:IsPerson = {
+//     name:'shaun',
+//     age:30,
+//     speak(text:string){
+//         console.log(text)
+//     },
+//     spend(amount:number){
+//         console.log('I spent', amount)
+//         return amount
+//     }
+// }
+// console.log(me)
+// const someone:IsPerson = {
+//     name:'Cecilia',
+//     age:27,
+//     speak(text:string){
+//         console.log(text)
+//     },
+//     spend(amount:number){
+//         console.log('I spent', amount)
+//         return amount
+//     }
+// }
+// console.log(someone)
+// const greetPerson = (person:IsPerson, num:number)=>{
+//     console.log('hello', person.name, person.spend(num))
+// }
+// greetPerson(me, 10)
+// greetPerson(someone, 5)
+//------------------------------------------------------------------------------
+// //CLASSES
+// //blueprint for an object
+// //public for default
+// class Invoice {
+//     readonly client: string; // if readonly I can access the value outside from the class but I can't modify it
+//     details: string;
+//     private amount: number; // if private I can't access the value outside from the class
+//     constructor(c:string,d:string,a:number) {
+//         this.client = c;
+//         this.details= d;
+//         this.amount=a
+//     }
+//     format(){
+//         return `${this.client} owes £${this.amount} for ${this.details}`
+//     }
+// }
+// //OPPURE ALTRA SINTASSI
+class Invoice2 {
+    constructor(client, details, amount) {
+        this.client = client;
+        this.details = details;
+        this.amount = amount;
     }
-};
-console.log(me);
-const someone = {
-    name: 'Cecilia',
-    age: 27,
-    speak(text) {
-        console.log(text);
-    },
-    spend(amount) {
-        console.log('I spent', amount);
-        return amount;
+    format() {
+        return `${this.client} owes £${this.amount} for ${this.details}`;
     }
-};
-console.log(someone);
-const greetPerson = (person, num) => {
-    console.log('hello', person.name, person.spend(num));
-};
-greetPerson(me, 10);
-greetPerson(someone, 5);
+}
+// const invOne = new Invoice2('mario', 'work on the mario website',250)
+// const invTwo = new Invoice2('luigi', 'work on the luigi website',300)
+// //I can just put in the object of type of this class
+// let invoices : Invoice2[] = []
+// invoices.push(invOne, invTwo)
+// // invOne.client='yoshi' => error is readonly
+// // invoices.push(me) => error is not an Invoice object
+// invoices.forEach(inv=>{
+//     console.log(inv.client, inv.details, inv.format())
+//     // console.log(inv.amount)=> error is private
+// })
+class ListTemplate {
+    constructor(container) {
+        this.container = container;
+    }
+    render(item, heading, position) {
+        const li = document.createElement('li');
+        const h4 = document.createElement('h4');
+        h4.innerText = heading;
+        li.append(h4);
+        const p = document.createElement('p');
+        p.innerText = item.format();
+        li.append(p);
+        if (position === 'start') {
+            this.container.prepend(li);
+        }
+        else {
+            this.container.append(li);
+        }
+    }
+}
+class Invoice3 {
+    constructor(client, details, amount) {
+        this.client = client;
+        this.details = details;
+        this.amount = amount;
+    }
+    format() {
+        return `${this.client} owes £${this.amount} for ${this.details}`;
+    }
+}
+class Payment {
+    constructor(recipient, details, amount) {
+        this.recipient = recipient;
+        this.details = details;
+        this.amount = amount;
+    }
+    format() {
+        return `${this.recipient} owes £${this.amount} for ${this.details}`;
+    }
+}
+// let docOne:HasFormatter;
+// let docTwo:HasFormatter;
+// docOne = new Invoice3('mario', 'web work', 200)
+// docTwo = new Payment('yoshi', 'plumbing work', 250)
+// let docs:HasFormatter[] = []
+// docs.push(docOne)
+// docs.push(docTwo)
+// console.log(docs)
+//------------------------------------------------------------------------------
+//DOM and TYPE CASTING
+const anchor = document.querySelector('a');
+// != I know this exist
+// const form = document.querySelector('form')!;
+// console.log(form)
+//if I grab the element typescript knows the element type
+//but if I use a class for ts it's just an element 
+//so i need to specify it
+const form = document.querySelector('.new-item-form');
+//inputs
+const type = document.querySelector('#type');
+const tofrom = document.querySelector('#tofrom');
+const details = document.querySelector('#details');
+const amount = document.querySelector('#amount');
+const ul = document.querySelector('ul');
+const list = new ListTemplate(ul);
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let doc;
+    if (type.value === 'invoice') {
+        doc = new Invoice3(tofrom.value, details.value, amount.valueAsNumber); //!!!!remember valueAsNumber
+    }
+    else {
+        doc = new Invoice2(tofrom.value, details.value, amount.valueAsNumber); //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
+    }
+    list.render(doc, type.value, 'end');
+});
+//------------------------------------------------------------------------------
+//ENUMS
