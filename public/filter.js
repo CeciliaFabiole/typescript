@@ -1,4 +1,3 @@
-"use strict";
 //ONLY NUMBERS
 // let arr:number[] = [0, 1, 2, 3, 4];
 // type callback = (a:number) => boolean
@@ -41,18 +40,18 @@
 // console.log(filterString(arrString, getA));
 //-------------------------------------------------------------------------------------
 //GENERIC
-let arrString = ['a', 'b', 'c', 'd', 'a', 'a'];
-let arr = [0, 1, 2, 3, 4];
-let getLessThan3 = (item) => {
+export let arrString = ['a', 'b', 'c', 'd', 'a', 'a'];
+export let arr = [0, 1, 2, 3, 4];
+export let getLessThan3 = (item) => {
     return item < 3;
 };
-let get3 = (item) => {
+export let get3 = (item) => {
     return item < 4 && item > 2;
 };
-let getA = (item) => {
+export let getA = (item) => {
     return item === 'a';
 };
-let filter = (array, cb) => {
+export let filter = (array, cb) => {
     let filteredArray = [];
     for (let i = 0; i < array.length; i++) {
         const element = cb(array[i]);

@@ -44,21 +44,21 @@
 // console.log(filterString(arrString, getA));
 //-------------------------------------------------------------------------------------
 //GENERIC
-let arrString:string[] = ['a','b','c','d','a','a']
-let arr:number[] = [0, 1, 2, 3, 4];
+export let arrString:string[] = ['a','b','c','d','a','a']
+export let arr:number[] = [0, 1, 2, 3, 4];
 type callback = <Type> (a:Type) => boolean
 
-let getLessThan3 : callback = (item) => {
+export let getLessThan3 : callback = (item) => {
 	return item < 3;
 };
-let get3 : callback = (item) => {
+export let get3 : callback = (item) => {
 	return item < 4 && item > 2;
 };
-let getA : callback = (item) => {
+export let getA : callback = (item) => {
 	return item === 'a';
 };
 
-let filter = <Type>(array:Type[], cb:callback):Type[] => {
+export let filter = <Type>(array:Type[], cb:callback):Type[] => {
 	let filteredArray:Type[] = [];
 		for (let i = 0; i < array.length; i++) {
 			const element = cb(array[i]);
@@ -69,6 +69,7 @@ let filter = <Type>(array:Type[], cb:callback):Type[] => {
 	
 	return filteredArray;
 };
+
 console.log(filter<number>(arr, getLessThan3));
 console.log(filter<number>(arr, get3));
 console.log(filter<string>(arrString, getA));

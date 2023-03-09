@@ -1,4 +1,5 @@
-"use strict";
+// import {getLessThan3, get3, getA, filter, arrString, arr} from './filter.js'
+import * as filter from './filter.js';
 // let character:string;
 // let age:number;
 // let isBlackBelt:boolean;
@@ -261,7 +262,7 @@ form.addEventListener('submit', (e) => {
         doc = new Invoice3(...values); //!!!!remember valueAsNumber
     }
     else {
-        doc = new Invoice2(...values); //io qui mi aspetterei un errore perché invoice2 non estende hasformatter
+        doc = new Invoice2(...values); //=>io qui mi aspetterei un errore perché invoice2 non estende hasformatter
     }
     list.render(doc, type.value, 'end');
 });
@@ -305,3 +306,10 @@ let tuple = ['yoshi', 4, true];
 tuple[0] = 'mario';
 tuple[0] = 'luigi';
 tuple[1] = 30;
+const obj = { width: 10, heigth: 15 };
+// Why is this NaN? Spelling is hard!
+const area = obj.width * obj.heigth;
+//da filter
+console.log(filter.filter(filter.arr, filter.getLessThan3));
+console.log(filter.filter(filter.arr, filter.get3));
+console.log(filter.filter(filter.arrString, filter.getA));
